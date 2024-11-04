@@ -24,7 +24,8 @@ import com.katas.tictactoe.utils.SquareState
 fun GameSquare(
     state: SquareState,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentDescription: String
 ) {
     Box(
         modifier = modifier
@@ -32,7 +33,7 @@ fun GameSquare(
             .size(100.dp)
             .background(GameSquareBackgroundColor)
             .clickable { onClick() }
-            .semantics { contentDescription = "Square" },
+            .semantics { this.contentDescription = contentDescription }, // Set content description
         contentAlignment = Alignment.Center
     ) {
         when (state) {
@@ -43,7 +44,6 @@ fun GameSquare(
                 modifier = Modifier.size(80.dp),
                 tint = CrossColor
             )
-
             SquareState.Circle -> Icon(
                 painter = painterResource(id = R.drawable.ic_circle),
                 contentDescription = "Circle",
