@@ -16,10 +16,10 @@ class GameSquareTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun gameSquare_isEmpty_whenStateIsNone() {
+    fun square_isEmpty_whenStateIsNone() {
         // Arrange
         composeTestRule.setContent {
-            GameSquare(state = SquareState.None, onClick = {})
+            GameSquare(state = SquareState.None, onClick = {}, contentDescription = "Square")
         }
 
         // Assert
@@ -30,10 +30,10 @@ class GameSquareTest {
     }
 
     @Test
-    fun gameSquare_displaysCross_whenStateIsCross() {
+    fun square_displaysCross_whenStateIsCross() {
         // Arrange
         composeTestRule.setContent {
-            GameSquare(state = SquareState.Cross, onClick = {})
+            GameSquare(state = SquareState.Cross, onClick = {}, contentDescription = "Square")
         }
 
         // Assert
@@ -42,10 +42,10 @@ class GameSquareTest {
     }
 
     @Test
-    fun gameSquare_displaysCircle_whenStateIsCircle() {
+    fun square_displaysCircle_whenStateIsCircle() {
         // Arrange
         composeTestRule.setContent {
-            GameSquare(state = SquareState.Circle, onClick = {})
+            GameSquare(state = SquareState.Circle, onClick = {}, contentDescription = "Square")
         }
 
         // Assert
@@ -54,13 +54,13 @@ class GameSquareTest {
     }
 
     @Test
-    fun gameSquare_triggersOnClick_whenClicked() {
+    fun square_triggersOnClick_whenClicked() {
         // Arrange
         var clicked = false
 
         // Act
         composeTestRule.setContent {
-            GameSquare(state = SquareState.None, onClick = { clicked = true })
+            GameSquare(state = SquareState.None, onClick = { clicked = true }, contentDescription = "Square")
         }
         composeTestRule.onNodeWithContentDescription("Square")
             .performClick()
