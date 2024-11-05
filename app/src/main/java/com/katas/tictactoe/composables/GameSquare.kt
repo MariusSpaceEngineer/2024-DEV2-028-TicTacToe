@@ -20,6 +20,15 @@ import com.katas.tictactoe.ui.theme.CrossColor
 import com.katas.tictactoe.ui.theme.GameSquareBackgroundColor
 import com.katas.tictactoe.utils.SquareState
 
+/**
+ * Composable function that represents a square in the game.
+ * The button displays a cross, circle, or remains empty based on the state.
+ *
+ * @param state The current state of the square (None, Cross, or Circle).
+ * @param onClick The callback to be invoked when the button is clicked.
+ * @param modifier The modifier to be applied to the button.
+ * @param contentDescription The content description for accessibility/testing purposes.
+ */
 @Composable
 fun GameSquare(
     state: SquareState,

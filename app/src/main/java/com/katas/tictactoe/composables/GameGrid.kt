@@ -14,6 +14,10 @@ import androidx.compose.ui.unit.dp
 import com.katas.tictactoe.ui.theme.GameGridBackgroundColor
 import com.katas.tictactoe.utils.SquareState
 
+/**
+ * Composable function that represents the grid of the game.
+ * The grid displays the current state of the board and handles square clicks.
+ */
 @Composable
 fun GameGrid(boardState: List<List<SquareState>>, onSquareClick: (Int, Int) -> Unit) {
     Column(
