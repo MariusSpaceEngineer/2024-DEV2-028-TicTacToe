@@ -5,3 +5,8 @@ enum class SquareState {
     Cross,
     Circle
 }
+
+enum class Player {
+    Player1,
+    Player2
+}
