@@ -17,12 +17,12 @@ class GameSquareTest {
 
     @Test
     fun square_isEmpty_whenStateIsNone() {
-        // Arrange
+        // Arrange: Set the content to display a GameSquare with state None
         composeTestRule.setContent {
             GameSquare(state = SquareState.None, onClick = {}, contentDescription = "Square")
         }
 
-        // Assert
+        // Assert: Verify that neither Cross nor Circle is displayed
         composeTestRule.onNodeWithContentDescription("Cross")
             .assertDoesNotExist()
         composeTestRule.onNodeWithContentDescription("Circle")
@@ -31,41 +31,41 @@ class GameSquareTest {
 
     @Test
     fun square_displaysCross_whenStateIsCross() {
-        // Arrange
+        // Arrange: Set the content to display a GameSquare with state Cross
         composeTestRule.setContent {
             GameSquare(state = SquareState.Cross, onClick = {}, contentDescription = "Square")
         }
 
-        // Assert
+        // Assert: Verify that Cross is displayed
         composeTestRule.onNodeWithContentDescription("Cross")
             .assertIsDisplayed()
     }
 
     @Test
     fun square_displaysCircle_whenStateIsCircle() {
-        // Arrange
+        // Arrange: Set the content to display a GameSquare with state Circle
         composeTestRule.setContent {
             GameSquare(state = SquareState.Circle, onClick = {}, contentDescription = "Square")
         }
 
-        // Assert
+        // Assert: Verify that Circle is displayed
         composeTestRule.onNodeWithContentDescription("Circle")
             .assertIsDisplayed()
     }
 
     @Test
     fun square_triggersOnClick_whenClicked() {
-        // Arrange
+        // Arrange: Initialize a variable to track click state
         var clicked = false
 
-        // Act
+        // Act: Set the content to display a GameSquare and update the click state when clicked
         composeTestRule.setContent {
             GameSquare(state = SquareState.None, onClick = { clicked = true }, contentDescription = "Square")
         }
         composeTestRule.onNodeWithContentDescription("Square")
             .performClick()
 
-        // Assert
+        // Assert: Verify that the click state was updated
         assert(clicked)
     }
 }

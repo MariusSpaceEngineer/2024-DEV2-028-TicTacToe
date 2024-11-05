@@ -16,15 +16,15 @@ class GameGridTest {
 
     @Test
     fun grid_displaysAllSquares() {
-        // Arrange
+        // Arrange: Initialize the board state with all squares set to None
         val boardState = List(3) { List(3) { SquareState.None } }
 
-        // Act
+        // Act: Set the content to display the GameGrid composable
         composeTestRule.setContent {
             GameGrid(boardState = boardState, onSquareClick = { _, _ -> })
         }
 
-        // Assert
+        // Assert: Verify that all squares in the grid are displayed
         for (i in 0 until 3) {
             for (j in 0 until 3) {
                 composeTestRule.onNodeWithContentDescription("Square $i-$j")
@@ -35,23 +35,25 @@ class GameGridTest {
 
     @Test
     fun grid_triggersOnSquareClick_whenSquareIsClicked() {
-        // Arrange
+        // Arrange: Initialize the board state with all squares set to None
         val boardState = List(3) { List(3) { SquareState.None } }
         var clickedRow = -1
         var clickedCol = -1
 
-        // Act
+        // Act: Set the content to display the GameGrid composable
         composeTestRule.setContent {
             GameGrid(boardState = boardState, onSquareClick = { row, col ->
+                // Update the clicked row and column when a square is clicked
                 clickedRow = row
                 clickedCol = col
             })
         }
 
+        // Perform a click on the square at position (1, 1)
         composeTestRule.onNodeWithContentDescription("Square 1-1")
             .performClick()
 
-        // Assert
+        // Assert: Verify that the correct square was clicked
         assert(clickedRow == 1)
         assert(clickedCol == 1)
     }
