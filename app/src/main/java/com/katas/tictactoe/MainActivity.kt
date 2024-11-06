@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
             TicTacToeTheme {
                 // Initialize the game state
                 val boardState =
-                    remember { mutableStateOf(MutableList(3) { MutableList(3) { SquareState.None } }) }
+                    remember { mutableStateOf(List(3) { List(3) { SquareState.None } }) }
                 val currentPlayer = remember { mutableStateOf(Player.Player1) }
                 val winnerMessage = remember { mutableStateOf("") }
 

@@ -41,7 +41,7 @@ class GameGridTest {
     @Test
     fun gameGrid_displaysCorrectLogo_whenSquareIsClicked() {
         // Arrange: Initialize the board state with all squares set to None
-        val boardState = mutableStateOf(MutableList(3) { MutableList(3) { SquareState.None } })
+        val boardState = mutableStateOf(List(3) { List(3) { SquareState.None } })
         // Arrange: Initialize the current player
         var currentPlayer = Player.Player1
         // Arrange: Initialize variables to track the clicked row and column
@@ -93,7 +93,7 @@ class GameGridTest {
     @Test
     fun gameGrid_displaysWinnerMessage_whenPlayerWins() {
         // Arrange: Initialize the board state with all squares set to None
-        val boardState = mutableStateOf(MutableList(3) { MutableList(3) { SquareState.None } })
+        val boardState = mutableStateOf(List(3) { List(3) { SquareState.None } })
         // Arrange: Initialize the current player
         var currentPlayer = Player.Player1
         // Arrange: Initialize the winner message
@@ -137,7 +137,7 @@ class GameGridTest {
     @Test
     fun gameGrid_displaysWinnerMessage_whenPlayer2Wins() {
         // Arrange: Initialize the board state with all squares set to None
-        val boardState = mutableStateOf(MutableList(3) { MutableList(3) { SquareState.None } })
+        val boardState = mutableStateOf(List(3) { List(3) { SquareState.None } })
         // Arrange: Initialize the current player
         var currentPlayer = Player.Player1
         // Arrange: Initialize the winner message
@@ -182,7 +182,7 @@ class GameGridTest {
     @Test
     fun gameGrid_displaysDrawMessage_whenGameIsDraw() {
         // Arrange: Initialize the board state with all squares set to None
-        val boardState = mutableStateOf(MutableList(3) { MutableList(3) { SquareState.None } })
+        val boardState = mutableStateOf(List(3) { List(3) { SquareState.None } })
         // Arrange: Initialize the current player
         var currentPlayer = Player.Player1
         // Arrange: Initialize the winner message
