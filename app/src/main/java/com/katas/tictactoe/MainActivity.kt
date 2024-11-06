@@ -5,10 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.katas.tictactoe.composables.GameGrid
+import com.katas.tictactoe.composables.GameOverDialog
 import com.katas.tictactoe.ui.theme.TicTacToeTheme
 import com.katas.tictactoe.utils.Player
 import com.katas.tictactoe.utils.SquareState
@@ -24,7 +24,9 @@ class MainActivity : ComponentActivity() {
                 val boardState =
                     remember { mutableStateOf(List(3) { List(3) { SquareState.None } }) }
                 val currentPlayer = remember { mutableStateOf(Player.Player1) }
-                val winnerMessage = remember { mutableStateOf("") }
+                val showDialog = remember { mutableStateOf(false) }
+                val isDraw = remember { mutableStateOf(false) }
+                var winner: SquareState? = null
 
                 Column {
                     GameGrid(boardState = boardState.value, onSquareClick = { i, j ->
@@ -38,16 +40,13 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                             // Check for a winner
-                            val winner = checkWin(boardState.value)
+                            winner = checkWin(boardState.value)
                             if (winner != null) {
-                                // Update the winner message
-                                winnerMessage.value =
-                                    if (winner == SquareState.Cross) "Player 1 wins!" else "Player 2 wins!"
-                            } else if (boardState.value.flatten()
-                                    .none { it == SquareState.None }
-                            ) {
+                                showDialog.value = true
+                            } else if (boardState.value.flatten().none { it == SquareState.None }) {
                                 // Check for a draw
-                                winnerMessage.value = "It's a draw!"
+                                isDraw.value = true
+                                showDialog.value = true
                             } else {
                                 // Switch the current player
                                 currentPlayer.value =
@@ -55,11 +54,27 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     })
-                    if (winnerMessage.value.isNotEmpty()) {
-                        Text(text = winnerMessage.value)
-                    }
+                    GameOverDialog(
+                        showDialog = showDialog.value,
+                        isDraw = isDraw.value,
+                        winner = winner,
+                        onPlayAgain = {
+                            // Reset the game state
+                            boardState.value = List(3) { List(3) { SquareState.None } }
+                            currentPlayer.value = Player.Player1
+                            showDialog.value = false
+                            isDraw.value = false
+                            winner = null
+                        },
+                        onCloseGame = {
+                            // Close the game
+                            finish()
+                        }
+                    )
                 }
             }
         }
     }
 }
+
+
