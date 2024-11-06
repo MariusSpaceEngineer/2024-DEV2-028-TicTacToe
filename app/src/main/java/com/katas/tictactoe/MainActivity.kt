@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import com.katas.tictactoe.composables.GameGrid
 import com.katas.tictactoe.composables.GameOverDialog
 import com.katas.tictactoe.composables.GameScore
+import com.katas.tictactoe.composables.GameTitle
 import com.katas.tictactoe.ui.theme.TicTacToeTheme
 import com.katas.tictactoe.utils.Player
 import com.katas.tictactoe.utils.SquareState
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
                 var player2Score by remember { mutableIntStateOf(0) }
 
                 Column {
+                    GameTitle("TicTacToe")
                     GameScore(player1Score = player1Score, player2Score = player2Score)
                     GameGrid(boardState = boardState.value, onSquareClick = { i, j ->
                         // Check if the selected square is empty and the game is not over
