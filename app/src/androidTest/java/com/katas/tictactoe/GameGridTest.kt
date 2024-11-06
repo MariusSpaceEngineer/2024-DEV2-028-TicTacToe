@@ -1,6 +1,5 @@
 package com.katas.tictactoe
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -8,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.katas.tictactoe.composables.GameGrid
+import com.katas.tictactoe.composables.GameOverDialog
 import com.katas.tictactoe.utils.Player
 import com.katas.tictactoe.utils.SquareState
 import com.katas.tictactoe.utils.checkWin
@@ -96,8 +96,10 @@ class GameGridTest {
         val boardState = mutableStateOf(List(3) { List(3) { SquareState.None } })
         // Arrange: Initialize the current player
         var currentPlayer = Player.Player1
-        // Arrange: Initialize the winner message
-        var winnerMessage = ""
+        // Arrange: Initialize the dialog state
+        val showDialog = mutableStateOf(false)
+        val isDraw = mutableStateOf(false)
+        var winner: SquareState? = null
 
         composeTestRule.setContent {
             GameGrid(boardState = boardState.value, onSquareClick = { row, col ->
@@ -107,31 +109,37 @@ class GameGridTest {
                             if (currentPlayer == Player.Player1) SquareState.Cross else SquareState.Circle
                     }
                 }
-                val winner = checkWin(boardState.value)
+                winner = checkWin(boardState.value)
                 if (winner != null) {
-                    winnerMessage =
-                        if (winner == SquareState.Cross) "Player 1 wins!" else "Player 2 wins!"
+                    showDialog.value = true
                 } else if (boardState.value.flatten().none { it == SquareState.None }) {
-                    winnerMessage = "It's a draw!"
+                    isDraw.value = true
+                    showDialog.value = true
                 } else {
                     currentPlayer =
                         if (currentPlayer == Player.Player1) Player.Player2 else Player.Player1
                 }
             })
-            if (winnerMessage.isNotEmpty()) {
-                Text(text = winnerMessage)
-            }
+            GameOverDialog(
+                showDialog = showDialog.value,
+                isDraw = isDraw.value,
+                winner = winner,
+                onPlayAgain = { /* Do nothing */ },
+                onCloseGame = { /* Do nothing */ }
+            )
         }
 
         // Simulate a winning move for Player 1
         composeTestRule.onNodeWithContentDescription("Square 0-0").performClick()
-        composeTestRule.onNodeWithContentDescription("Square 0-1").performClick()
         composeTestRule.onNodeWithContentDescription("Square 1-0").performClick()
+        composeTestRule.onNodeWithContentDescription("Square 0-1").performClick()
         composeTestRule.onNodeWithContentDescription("Square 1-1").performClick()
-        composeTestRule.onNodeWithContentDescription("Square 2-0").performClick()
+        composeTestRule.onNodeWithContentDescription("Square 0-2").performClick()
 
-        // Assert: Verify that the winner message is displayed
+        // Assert that the GameOverDialog is displayed with the correct message
         composeTestRule.onNodeWithText("Player 1 wins!").assertIsDisplayed()
+        // Assert that the GameOverDialog composable is displayed
+        composeTestRule.onNodeWithText("Game Over").assertIsDisplayed()
     }
 
     @Test
@@ -140,8 +148,10 @@ class GameGridTest {
         val boardState = mutableStateOf(List(3) { List(3) { SquareState.None } })
         // Arrange: Initialize the current player
         var currentPlayer = Player.Player1
-        // Arrange: Initialize the winner message
-        var winnerMessage = ""
+        // Arrange: Initialize the dialog state
+        val showDialog = mutableStateOf(false)
+        val isDraw = mutableStateOf(false)
+        var winner: SquareState? = null
 
         composeTestRule.setContent {
             GameGrid(boardState = boardState.value, onSquareClick = { row, col ->
@@ -151,20 +161,24 @@ class GameGridTest {
                             if (currentPlayer == Player.Player1) SquareState.Cross else SquareState.Circle
                     }
                 }
-                val winner = checkWin(boardState.value)
+                winner = checkWin(boardState.value)
                 if (winner != null) {
-                    winnerMessage =
-                        if (winner == SquareState.Cross) "Player 1 wins!" else "Player 2 wins!"
+                    showDialog.value = true
                 } else if (boardState.value.flatten().none { it == SquareState.None }) {
-                    winnerMessage = "It's a draw!"
+                    isDraw.value = true
+                    showDialog.value = true
                 } else {
                     currentPlayer =
                         if (currentPlayer == Player.Player1) Player.Player2 else Player.Player1
                 }
             })
-            if (winnerMessage.isNotEmpty()) {
-                Text(text = winnerMessage)
-            }
+            GameOverDialog(
+                showDialog = showDialog.value,
+                isDraw = isDraw.value,
+                winner = winner,
+                onPlayAgain = { /* Do nothing */ },
+                onCloseGame = { /* Do nothing */ }
+            )
         }
 
         // Simulate a winning move for Player 2
@@ -175,8 +189,10 @@ class GameGridTest {
         composeTestRule.onNodeWithContentDescription("Square 2-2").performClick() // x
         composeTestRule.onNodeWithContentDescription("Square 1-2").performClick() // o
 
-        // Assert: Verify that the winner message is displayed
+        // Assert that the GameOverDialog is displayed with the correct message
         composeTestRule.onNodeWithText("Player 2 wins!").assertIsDisplayed()
+        // Assert that the GameOverDialog composable is displayed
+        composeTestRule.onNodeWithText("Game Over").assertIsDisplayed()
     }
 
     @Test
@@ -185,8 +201,10 @@ class GameGridTest {
         val boardState = mutableStateOf(List(3) { List(3) { SquareState.None } })
         // Arrange: Initialize the current player
         var currentPlayer = Player.Player1
-        // Arrange: Initialize the winner message
-        var winnerMessage = ""
+        // Arrange: Initialize the dialog state
+        val showDialog = mutableStateOf(false)
+        val isDraw = mutableStateOf(false)
+        var winner: SquareState? = null
 
         composeTestRule.setContent {
             GameGrid(boardState = boardState.value, onSquareClick = { row, col ->
@@ -196,20 +214,24 @@ class GameGridTest {
                             if (currentPlayer == Player.Player1) SquareState.Cross else SquareState.Circle
                     }
                 }
-                val winner = checkWin(boardState.value)
+                winner = checkWin(boardState.value)
                 if (winner != null) {
-                    winnerMessage =
-                        if (winner == SquareState.Cross) "Player 1 wins!" else "Player 2 wins!"
+                    showDialog.value = true
                 } else if (boardState.value.flatten().none { it == SquareState.None }) {
-                    winnerMessage = "It's a draw!"
+                    isDraw.value = true
+                    showDialog.value = true
                 } else {
                     currentPlayer =
                         if (currentPlayer == Player.Player1) Player.Player2 else Player.Player1
                 }
             })
-            if (winnerMessage.isNotEmpty()) {
-                Text(text = winnerMessage)
-            }
+            GameOverDialog(
+                showDialog = showDialog.value,
+                isDraw = isDraw.value,
+                winner = winner,
+                onPlayAgain = { /* Do nothing */ },
+                onCloseGame = { /* Do nothing */ }
+            )
         }
 
         // Simulate moves leading to a draw
@@ -225,5 +247,7 @@ class GameGridTest {
 
         // Assert: Verify that the draw message is displayed
         composeTestRule.onNodeWithText("It's a draw!").assertIsDisplayed()
+        // Assert: Verify that the GameOverDialog composable is displayed
+        composeTestRule.onNodeWithText("Game Over").assertIsDisplayed()
     }
 }
