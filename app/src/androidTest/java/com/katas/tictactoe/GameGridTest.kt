@@ -1,13 +1,16 @@
 package com.katas.tictactoe
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.katas.tictactoe.composables.GameGrid
 import com.katas.tictactoe.utils.Player
 import com.katas.tictactoe.utils.SquareState
+import com.katas.tictactoe.utils.checkWin
 import org.junit.Rule
 import org.junit.Test
 
@@ -84,5 +87,143 @@ class GameGridTest {
         // Assert: Verify that the correct logo is displayed in the new clicked square
         composeTestRule.onNodeWithContentDescription("Circle")
             .assertIsDisplayed()
+    }
+
+
+    @Test
+    fun gameGrid_displaysWinnerMessage_whenPlayerWins() {
+        // Arrange: Initialize the board state with all squares set to None
+        val boardState = mutableStateOf(MutableList(3) { MutableList(3) { SquareState.None } })
+        // Arrange: Initialize the current player
+        var currentPlayer = Player.Player1
+        // Arrange: Initialize the winner message
+        var winnerMessage = ""
+
+        composeTestRule.setContent {
+            GameGrid(boardState = boardState.value, onSquareClick = { row, col ->
+                boardState.value = boardState.value.toMutableList().apply {
+                    this[row] = this[row].toMutableList().apply {
+                        this[col] =
+                            if (currentPlayer == Player.Player1) SquareState.Cross else SquareState.Circle
+                    }
+                }
+                val winner = checkWin(boardState.value)
+                if (winner != null) {
+                    winnerMessage =
+                        if (winner == SquareState.Cross) "Player 1 wins!" else "Player 2 wins!"
+                } else if (boardState.value.flatten().none { it == SquareState.None }) {
+                    winnerMessage = "It's a draw!"
+                } else {
+                    currentPlayer =
+                        if (currentPlayer == Player.Player1) Player.Player2 else Player.Player1
+                }
+            })
+            if (winnerMessage.isNotEmpty()) {
+                Text(text = winnerMessage)
+            }
+        }
+
+        // Simulate a winning move for Player 1
+        composeTestRule.onNodeWithContentDescription("Square 0-0").performClick()
+        composeTestRule.onNodeWithContentDescription("Square 0-1").performClick()
+        composeTestRule.onNodeWithContentDescription("Square 1-0").performClick()
+        composeTestRule.onNodeWithContentDescription("Square 1-1").performClick()
+        composeTestRule.onNodeWithContentDescription("Square 2-0").performClick()
+
+        // Assert: Verify that the winner message is displayed
+        composeTestRule.onNodeWithText("Player 1 wins!").assertIsDisplayed()
+    }
+
+    @Test
+    fun gameGrid_displaysWinnerMessage_whenPlayer2Wins() {
+        // Arrange: Initialize the board state with all squares set to None
+        val boardState = mutableStateOf(MutableList(3) { MutableList(3) { SquareState.None } })
+        // Arrange: Initialize the current player
+        var currentPlayer = Player.Player1
+        // Arrange: Initialize the winner message
+        var winnerMessage = ""
+
+        composeTestRule.setContent {
+            GameGrid(boardState = boardState.value, onSquareClick = { row, col ->
+                boardState.value = boardState.value.toMutableList().apply {
+                    this[row] = this[row].toMutableList().apply {
+                        this[col] =
+                            if (currentPlayer == Player.Player1) SquareState.Cross else SquareState.Circle
+                    }
+                }
+                val winner = checkWin(boardState.value)
+                if (winner != null) {
+                    winnerMessage =
+                        if (winner == SquareState.Cross) "Player 1 wins!" else "Player 2 wins!"
+                } else if (boardState.value.flatten().none { it == SquareState.None }) {
+                    winnerMessage = "It's a draw!"
+                } else {
+                    currentPlayer =
+                        if (currentPlayer == Player.Player1) Player.Player2 else Player.Player1
+                }
+            })
+            if (winnerMessage.isNotEmpty()) {
+                Text(text = winnerMessage)
+            }
+        }
+
+        // Simulate a winning move for Player 2
+        composeTestRule.onNodeWithContentDescription("Square 0-0").performClick() // x
+        composeTestRule.onNodeWithContentDescription("Square 1-0").performClick() // o
+        composeTestRule.onNodeWithContentDescription("Square 0-1").performClick() // x
+        composeTestRule.onNodeWithContentDescription("Square 1-1").performClick() // o
+        composeTestRule.onNodeWithContentDescription("Square 2-2").performClick() // x
+        composeTestRule.onNodeWithContentDescription("Square 1-2").performClick() // o
+
+        // Assert: Verify that the winner message is displayed
+        composeTestRule.onNodeWithText("Player 2 wins!").assertIsDisplayed()
+    }
+
+    @Test
+    fun gameGrid_displaysDrawMessage_whenGameIsDraw() {
+        // Arrange: Initialize the board state with all squares set to None
+        val boardState = mutableStateOf(MutableList(3) { MutableList(3) { SquareState.None } })
+        // Arrange: Initialize the current player
+        var currentPlayer = Player.Player1
+        // Arrange: Initialize the winner message
+        var winnerMessage = ""
+
+        composeTestRule.setContent {
+            GameGrid(boardState = boardState.value, onSquareClick = { row, col ->
+                boardState.value = boardState.value.toMutableList().apply {
+                    this[row] = this[row].toMutableList().apply {
+                        this[col] =
+                            if (currentPlayer == Player.Player1) SquareState.Cross else SquareState.Circle
+                    }
+                }
+                val winner = checkWin(boardState.value)
+                if (winner != null) {
+                    winnerMessage =
+                        if (winner == SquareState.Cross) "Player 1 wins!" else "Player 2 wins!"
+                } else if (boardState.value.flatten().none { it == SquareState.None }) {
+                    winnerMessage = "It's a draw!"
+                } else {
+                    currentPlayer =
+                        if (currentPlayer == Player.Player1) Player.Player2 else Player.Player1
+                }
+            })
+            if (winnerMessage.isNotEmpty()) {
+                Text(text = winnerMessage)
+            }
+        }
+
+        // Simulate moves leading to a draw
+        composeTestRule.onNodeWithContentDescription("Square 0-0").performClick() // x
+        composeTestRule.onNodeWithContentDescription("Square 0-1").performClick() // o
+        composeTestRule.onNodeWithContentDescription("Square 0-2").performClick() // x
+        composeTestRule.onNodeWithContentDescription("Square 1-1").performClick() // o
+        composeTestRule.onNodeWithContentDescription("Square 1-0").performClick() // x
+        composeTestRule.onNodeWithContentDescription("Square 1-2").performClick() // o
+        composeTestRule.onNodeWithContentDescription("Square 2-1").performClick() // x
+        composeTestRule.onNodeWithContentDescription("Square 2-0").performClick() // o
+        composeTestRule.onNodeWithContentDescription("Square 2-2").performClick() // x
+
+        // Assert: Verify that the draw message is displayed
+        composeTestRule.onNodeWithText("It's a draw!").assertIsDisplayed()
     }
 }
