@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.katas.tictactoe.ui.theme.TextColor
 
 /**
  * Composable function that displays the title of the game.
@@ -18,7 +18,7 @@ fun GameTitle(title: String) {
     Text(
         text = title,
         fontSize = 48.sp,
-        color = Color.Black,
+        color = TextColor,
         modifier = Modifier.padding(16.dp)
     )
 }
